@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-@ResponseStatus(HttpStatus.NOT_FOUND)
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handleTaskNotFound(TaskNotFoundException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
