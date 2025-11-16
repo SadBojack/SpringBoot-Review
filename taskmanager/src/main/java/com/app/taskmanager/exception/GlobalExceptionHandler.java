@@ -15,12 +15,13 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleTaskNotFound(TaskNotFoundException ex) {
+    public ResponseEntity<Map<String, Object>> handleTaskNotFound(TaskNotFoundException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("error", ex.getMessage());
 
-        return body;  // JSON returned automatically
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(body);  // JSON returned automatically
     }
 }
