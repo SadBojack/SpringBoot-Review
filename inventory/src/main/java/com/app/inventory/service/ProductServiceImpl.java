@@ -28,10 +28,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProduct(Long id) {
-
-        return null;
-
-
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        return toResponse(product);
 
     }
 
