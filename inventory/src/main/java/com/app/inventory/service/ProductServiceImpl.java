@@ -3,10 +3,12 @@ package com.app.inventory.service;
 import com.app.inventory.dto.ProductRequest;
 import com.app.inventory.dto.ProductResponse;
 import com.app.inventory.entity.Product;
+import com.app.inventory.exception.ProductNotFoundException;
 import com.app.inventory.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,10 +30,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         return toResponse(product);
 
     }
+
+    @Override
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream().map(this::toResponse).toList();
+    }
+
 
     private Product toEntity(ProductRequest request) {
         Product product = new Product();
