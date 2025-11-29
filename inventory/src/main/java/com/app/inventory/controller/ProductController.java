@@ -49,5 +49,14 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/search/category")
+    public ResponseEntity<List<ProductResponse>> findByCategory(@RequestParam String category) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductByCategory(category));
+    }
+
+    @GetMapping("/search/price")
+    public ResponseEntity<List<ProductResponse>> findByPriceBetween(@RequestParam Double min, @RequestParam Double max) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductByPriceBetween(min,max));
+    }
 
 }

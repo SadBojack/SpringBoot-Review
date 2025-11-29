@@ -7,6 +7,7 @@ import com.app.inventory.exception.ProductNotFoundException;
 import com.app.inventory.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = toEntity(productRequest);
         Product newProduct = productRepository.save(product);
@@ -41,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product getProduct = productRepository.findById(id).orElseThrow((() -> new ProductNotFoundException(id)));
 
@@ -53,11 +56,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductResponse> getProductByCategory(String category) {
+        return productRepository.findByCategoryIgnoreCase(category).stream().map(this::toResponse).toList();
+    }
+
+    @Override
+    public List<ProductResponse> getProductByPriceBetween(Double min, Double max) {
+        return productRepository.findByPriceBetween(min, max).stream().map(this::toResponse).toList();
     }
 
 

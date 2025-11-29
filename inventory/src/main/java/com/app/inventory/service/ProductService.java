@@ -16,4 +16,8 @@ public interface ProductService {
 
     void deleteProduct(Long id);
 
+    List<ProductResponse> getProductByCategory(String category);
+
+    List<ProductResponse> getProductByPriceBetween(Double min, Double max);
+
 }

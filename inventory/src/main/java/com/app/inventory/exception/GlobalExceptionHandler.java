@@ -4,6 +4,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -35,6 +36,17 @@ public class GlobalExceptionHandler {
         body.put("error", errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        map.put("timestamp", LocalDateTime.now());
+        map.put("error", "Missing required parameter.");
+        map.put("parameter", ex.getParameterName());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
     }
 
     @ExceptionHandler(Exception.class)
