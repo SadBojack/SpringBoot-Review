@@ -40,6 +40,26 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll().stream().map(this::toResponse).toList();
     }
 
+    @Override
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+        Product getProduct = productRepository.findById(id).orElseThrow((() -> new ProductNotFoundException(id)));
+
+        getProduct.setCategory(productRequest.getCategory());
+        getProduct.setName(productRequest.getName());
+        getProduct.setPrice(productRequest.getPrice());
+        getProduct.setStock(productRequest.getStock());
+
+        return toResponse(productRepository.save(getProduct));
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
+        productRepository.deleteById(id);
+    }
+
 
     private Product toEntity(ProductRequest request) {
         Product product = new Product();

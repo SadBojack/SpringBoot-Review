@@ -2,6 +2,7 @@ package com.app.inventory.controller;
 
 import com.app.inventory.dto.ProductRequest;
 import com.app.inventory.dto.ProductResponse;
+import com.app.inventory.entity.Product;
 import com.app.inventory.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,17 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProducts());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponse> update(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
 }
