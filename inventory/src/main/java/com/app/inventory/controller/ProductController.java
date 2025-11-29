@@ -6,6 +6,9 @@ import com.app.inventory.entity.Product;
 import com.app.inventory.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +60,11 @@ public class ProductController {
     @GetMapping("/search/price")
     public ResponseEntity<List<ProductResponse>> findByPriceBetween(@RequestParam Double min, @RequestParam Double max) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductByPriceBetween(min,max));
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<ProductResponse>> getPaginatedProducts(@PageableDefault(size = 10, page = 0, sort="name")Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllPageable(pageable));
     }
 
 }
